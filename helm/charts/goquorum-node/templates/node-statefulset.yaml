@@ -17,6 +17,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
+
   podManagementPolicy: OrderedReady
   updateStrategy:
     type: RollingUpdate
@@ -55,6 +56,10 @@ spec:
         prometheus.io/port: {{ .Values.node.goquorum.metrics.pprofport | quote}}
         prometheus.io/path: "/debug/metrics/prometheus"        
     spec:
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
 {{- if and (eq .Values.cluster.provider "aws") (.Values.cluster.cloudNativeServices) }}
       serviceAccountName: {{ .Values.aws.serviceAccountName }}
 {{- else }}
@@ -334,4 +339,3 @@ spec:
             - key: tesseraPeers
               path: tesseraPeers
 {{- end }}
-

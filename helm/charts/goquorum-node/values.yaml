@@ -117,3 +117,10 @@ image:
     repository: consensys/quorum-k8s-hooks
     tag: qgt-0.2.3
     pullPolicy: IfNotPresent
+
+
+tolerations:
+  - key: dedicated
+    operator: Equal
+    value: blockchain
+    effect: NoSchedule
