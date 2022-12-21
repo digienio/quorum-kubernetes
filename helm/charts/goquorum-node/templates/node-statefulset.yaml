@@ -60,13 +60,20 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
       {{- end }}
+
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
+
 {{- if and (eq .Values.cluster.provider "aws") (.Values.cluster.cloudNativeServices) }}
       serviceAccountName: {{ .Values.aws.serviceAccountName }}
 {{- else }}
       serviceAccountName: {{ include "goquorum-node.fullname" . }}-sa
 {{- end}}    
-      containers:
 
+
+      containers:
 {{- if .Values.quorumFlags.privacy }}
       - name: {{ include "goquorum-node.fullname" . }}-tessera
         image: {{ .Values.image.tessera.repository }}:{{ .Values.image.tessera.tag }}
